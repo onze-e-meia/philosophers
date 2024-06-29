@@ -6,7 +6,7 @@
 #    By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 14:23:38 by tforster          #+#    #+#              #
-#    Updated: 2024/06/28 17:44:25 by tforster         ###   ########.fr        #
+#    Updated: 2024/06/29 14:55:03 by tforster         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ NAME	=	philosophers
 
 FILES	=	\
 	philosophers.c \
+	utils.c \
 
 SRCDIR	=	src
 SRC		=	$(FILES:%.c=$(SRCDIR)/%.o)
@@ -54,3 +55,6 @@ fclean: clean
 re: clean all
 
 .PHONY: all, clean, fclean, re
+
+
+# CVb3d2023
