@@ -11,3 +11,4 @@ objs/
 *.o
 *.sh
 *.txt
+philosophers

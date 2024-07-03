@@ -6,7 +6,7 @@
 #    By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 14:23:38 by tforster          #+#    #+#              #
-#    Updated: 2024/06/29 14:55:03 by tforster         ###   ########.fr        #
+#    Updated: 2024/07/03 17:18:10 by tforster         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,11 @@ RST		=	\033[0m
 NAME	=	philosophers
 
 FILES	=	\
-	philosophers.c \
+	main.c \
 	utils.c \
+	init_args.c \
+	init_mutex.c \
+	init_threads.c \
 
 SRCDIR	=	src
 SRC		=	$(FILES:%.c=$(SRCDIR)/%.o)
@@ -32,7 +35,8 @@ OBJDIR	=	obj
 OBJ		=	${FILES:%.c=$(OBJDIR)/%.o}
 
 CC		=	cc
-CFLGS	=	-Wextra -Wall -Werror
+# CFLGS	=	-g3 -pthread -Wextra -Wall -Werror
+CFLGS	=	-g3 -pthread
 
 all: $(NAME)
 
