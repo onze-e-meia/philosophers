@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 17:28:26 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/03 19:19:46 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/03 19:59:48 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,10 @@
 
 int	main(int argc, char **argv)
 {
-	t_args	args;
-	t_locks	*locks;
-	t_philo	*philo;
+	t_args		args;
+	t_locks		*locks;
+	t_philo		*philo;
+	pthread_t	*thread;
 
 	int		index;
 
@@ -85,19 +86,20 @@ int	main(int argc, char **argv)
 
 	locks = init_mutex(args.nb_philos);
 
-	philo = init_threads(&args, locks);
-	join_threads(philo, args.nb_philos);
+	// philo = init_threads(&args, locks);
+	thread = init_threads(&args, locks);
+	join_threads(thread, args.nb_philos);
 
 
-	index = 0;
-	while (index < args.nb_philos)
-	{
-		printf("PHILO ID [%d] BORN [%ld]\n", philo[index].id, philo[index].born);
-		printf("L[%d] R[%d]\n", index % args.nb_philos, (index + 1) % args.nb_philos);
-		index++;
-	}
+	// index = 0;
+	// while (index < args.nb_philos)
+	// {
+	// 	printf("PHILO ID [%d] BORN [%ld]\n", philo[index].id, philo[index].born);
+	// 	printf("L[%d] R[%d]\n", index % args.nb_philos, (index + 1) % args.nb_philos);
+	// 	index++;
+	// }
 
-	free(philo);
+	free(thread);
 	destroy_mutex(locks, args.nb_philos);
 	return (flag);
 }

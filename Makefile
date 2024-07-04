@@ -6,7 +6,7 @@
 #    By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 14:23:38 by tforster          #+#    #+#              #
-#    Updated: 2024/07/03 17:18:10 by tforster         ###   ########.fr        #
+#    Updated: 2024/07/04 16:43:12 by tforster         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ CYA		=	\033[0;36m
 WHT		=	\033[0;37m
 RST		=	\033[0m
 
-NAME	=	philosophers
+NAME	=	philo
 
 FILES	=	\
 	main.c \
@@ -27,6 +27,7 @@ FILES	=	\
 	init_args.c \
 	init_mutex.c \
 	init_threads.c \
+	routine.c \
 
 SRCDIR	=	src
 SRC		=	$(FILES:%.c=$(SRCDIR)/%.o)

@@ -12,3 +12,4 @@ objs/
 *.sh
 *.txt
 philosophers
+philo

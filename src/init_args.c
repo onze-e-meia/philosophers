@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 16:52:31 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/03 17:12:31 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:52:36 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	init_args(int argc, char **argv, t_args *args)
 	args->eat = atoi(argv[3]) * 1000;
 	args->sleep = atoi(argv[4]) * 1000;
 	args->times = -1;
+	args->dead = false;
 	if (argc == 6)
 		args->times = atoi(argv[5]);
 	return (0);
