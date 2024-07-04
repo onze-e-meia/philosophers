@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 17:28:26 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/03 19:59:48 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/04 16:48:58 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	main(int argc, char **argv)
 {
 	t_args		args;
 	t_locks		*locks;
-	t_philo		*philo;
+	t_phi		*phi;
 	pthread_t	*thread;
 
 	int		index;
@@ -86,7 +86,7 @@ int	main(int argc, char **argv)
 
 	locks = init_mutex(args.nb_philos);
 
-	// philo = init_threads(&args, locks);
+	// phi = init_threads(&args, locks);
 	thread = init_threads(&args, locks);
 	join_threads(thread, args.nb_philos);
 
@@ -94,7 +94,7 @@ int	main(int argc, char **argv)
 	// index = 0;
 	// while (index < args.nb_philos)
 	// {
-	// 	printf("PHILO ID [%d] BORN [%ld]\n", philo[index].id, philo[index].born);
+	// 	printf("phi ID [%d] BORN [%ld]\n", phi[index].id, phi[index].born);
 	// 	printf("L[%d] R[%d]\n", index % args.nb_philos, (index + 1) % args.nb_philos);
 	// 	index++;
 	// }

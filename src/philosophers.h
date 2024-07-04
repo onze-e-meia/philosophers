@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 17:36:34 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/04 16:44:29 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/04 16:48:58 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ typedef struct s_philo
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*write;
 	pthread_mutex_t	*dead;
-}					t_philo;
+}					t_phi;
 
 
 suseconds_t	get_time();

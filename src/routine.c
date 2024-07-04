@@ -6,59 +6,59 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:42:54 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/04 16:46:02 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/04 16:48:58 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void	print_status(t_philo *philo, t_time *t, pthread_mutex_t *write, char *msg);
+static void	print_status(t_phi *phi, t_time *t, pthread_mutex_t *write, char *msg);
 static suseconds_t	delta_t(t_time *t0, t_time *t1);
 
 void	*greedy_phi(void *args)
 {
 	int		count;
-	t_philo	*philo;
+	t_phi	*phi;
 
-	philo = (t_philo *) args;
+	phi = (t_phi *) args;
 
 	count = 0;
-	while (!philo->args->dead && count < philo->args->times)
+	while (!phi->args->dead && count < phi->args->times)
 	{
 		t_time	t[2];
 		t_time	t_left;
 		t_time	t_right;
 
-		if ((philo->id + philo->eat) % 2 != 0)
+		if ((phi->id + phi->eat) % 2 != 0)
 		{
-			pthread_mutex_lock(philo->l_fork);
+			pthread_mutex_lock(phi->l_fork);
 			gettimeofday(&t[LFT], NULL);
-			print_status(philo, &t[LFT], philo->write, FORK);
+			print_status(phi, &t[LFT], phi->write, FORK);
 
-			pthread_mutex_lock(philo->r_fork);
+			pthread_mutex_lock(phi->r_fork);
 			gettimeofday(&t[RGT], NULL);
-			print_status(philo, &t[RGT], philo->write, FORK);
+			print_status(phi, &t[RGT], phi->write, FORK);
 
 			gettimeofday(&t[RGT], NULL);
-			print_status(philo, &t[RGT], philo->write, EAT);
+			print_status(phi, &t[RGT], phi->write, EAT);
 
-			usleep(philo->args->eat);
-			pthread_mutex_unlock(philo->l_fork);
-			pthread_mutex_unlock(philo->r_fork);
+			usleep(phi->args->eat);
+			pthread_mutex_unlock(phi->l_fork);
+			pthread_mutex_unlock(phi->r_fork);
 		}
 		count++;
 	}
 
-	free(philo);
+	free(phi);
 	return (NULL);
 }
 
-void	print_status(t_philo *philo, t_time *t, pthread_mutex_t *write, char *msg)
+void	print_status(t_phi *phi, t_time *t, pthread_mutex_t *write, char *msg)
 {
 	suseconds_t m_sec;
 
-	m_sec = delta_t(&philo->t0, t);
-	printf(msg, m_sec, philo->id);
+	m_sec = delta_t(&phi->t0, t);
+	printf(msg, m_sec, phi->id);
 }
 
 suseconds_t	delta_t(t_time *t0, t_time *t1)
