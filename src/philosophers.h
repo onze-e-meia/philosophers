@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 17:36:34 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/04 16:48:58 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/04 19:55:21 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@
 # define ERR04 "Argument time (micro_s) is bigger then 16 minutes.\n"
 # define ERR05 "Argument times to eat is bigger then 999999999.\n"
 
-# define FORK " %ld %d\033[0;36m has taken a fork\033[0m\n"
-# define EAT " %ld %d \033[0;33m is eating\033[0m\n"
-# define SLEEP "is sleeping\033[0m"
-# define THINK "is thinking\033[0m"
-# define DIE "has taken a fork\033[0m"
+# define FORK " %ld %d\033[0;35m has taken a fork\033[0m\n"
+# define EAT " %ld %d\033[0;33m is eating\033[0m\n"
+# define SLEEP " %ld %d\033[0;32m is sleeping\033[0m\n"
+# define THINK " %ld %d\033[0;34m is thinking\033[0m\n"
+# define DIE " %ld %d\033[0;31m died\033[0m\n"
 
 # define LFT 0
 # define RGT 1
@@ -70,7 +70,6 @@ typedef struct s_locks
 	pthread_mutex_t	write;
 	pthread_mutex_t	dead;
 }					t_locks;
-
 
 typedef struct s_philo
 {
