@@ -6,18 +6,18 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:42:25 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/04 13:59:05 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/05 15:31:10 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-// void	get_time(t_time time)
+// void	get_time(t_tval time)
 // {
 // 	gettimeofday(&time, NULL);
 // }
 
-suseconds_t	get_time()
+t_usec	get_time()
 {
 	struct timeval	time;
 	struct timeval	tv2;

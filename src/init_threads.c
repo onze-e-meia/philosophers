@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 16:49:10 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/04 16:48:58 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/05 15:05:59 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,16 @@ t_phi	*init_philo(t_args *args, t_locks *locks, int index)
 	gettimeofday(&phi->t0, NULL);
 	phi->eat = 0;
 	phi->args = args;
-	phi->l_fork = &locks->forks[index % total];
-	phi->r_fork = &locks->forks[(index + 1) % total];
+	if (phi->id % 2 != 0)
+	{
+		phi->l_fork = &locks->forks[index % total];
+		phi->r_fork = &locks->forks[(index + 1) % total];
+	}
+	else
+	{
+		phi->l_fork = &locks->forks[(index + 1) % total];
+		phi->r_fork = &locks->forks[index % total];
+	}
 	phi->write = &locks->write;
 	phi->dead = &locks->dead;
 	return (phi);

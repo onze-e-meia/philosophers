@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 17:36:34 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/04 19:55:21 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/05 17:38:13 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,16 @@ typedef enum e_arg_error
 	TOO_BIG,
 }	t_arg_error;
 
-typedef struct timeval t_time;
+typedef struct timeval	t_tval;
+typedef suseconds_t		t_usec;
+typedef pthread_mutex_t	t_mutex;
 
 typedef struct s_args
 {
 	int				nb_philos;
-	suseconds_t		live;
-	suseconds_t		eat;
-	suseconds_t		sleep;
+	t_usec		live;
+	t_usec		eat;
+	t_usec		sleep;
 	int				times;
 	bool			dead;
 }					t_args;
@@ -74,7 +76,8 @@ typedef struct s_locks
 typedef struct s_philo
 {
 	int				id;
-	t_time			t0;
+	t_tval			t0;
+	t_usec			time;
 	int				eat;
 	t_args			*args;
 	pthread_mutex_t	*l_fork;
@@ -83,8 +86,7 @@ typedef struct s_philo
 	pthread_mutex_t	*dead;
 }					t_phi;
 
-
-suseconds_t	get_time();
+t_usec	get_time(void);
 void		put_str(int fd, char *str);
 int			is_digit(int ch);
 int			atoi(const char *nbr);

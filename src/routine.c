@@ -6,14 +6,14 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:42:54 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/04 20:37:09 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/05 17:48:35 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void	print_state(t_phi *phi, bool state, char *msg);
-static suseconds_t	delta_t(t_time *t0, t_time *t1);
+static t_usec	check_state(t_phi *phi, bool state, char *msg);
+static t_usec	delta_t(t_tval *t0, t_tval *t1);
 int		check_dead(t_phi *phi);
 void	print_dead(t_phi *phi, char *msg);
 
@@ -21,142 +21,120 @@ void	print_dead(t_phi *phi, char *msg);
 void	*greedy_phi(void *args)
 {
 	int		count;
+	t_usec	dt;
+	t_tval	tval;
 	t_phi	*phi;
 
 	phi = (t_phi *) args;
-
+	dt = 0;
 	count = 0;
-	while (!phi->args->dead && count < phi->args->times)
-	// pthread_mutex_lock(phi->dead);
-	// while (!check_dead(phi) && count < phi->args->times)
+
+	bool	loop;
+	loop = false;
+	if (phi->args->times == -1)
+		loop = true;
+
+	while (count < phi->args->times || loop)
 	{
-		// printf("ID[%d] COUNT[%d] EAT[%d] [%d]\n", phi->id, count, phi->eat, (phi->id + phi->eat) % 2);
-		// pthread_mutex_lock(phi->dead);
-		// if (!check_dead(phi) && (phi->id + phi->eat) % 2 != 0)
-		if ((phi->id + phi->eat) % 2 != 0)
+
+		pthread_mutex_lock(phi->l_fork);
+		check_state(phi, false, FORK);
+
+		pthread_mutex_lock(phi->r_fork);
+		check_state(phi, false, FORK);
+
+		// gettimeofday(&tval, NULL);
+		// dt = tval.tv_sec * 1000000 + tval.tv_usec - dt;
+		// printf(">> id[%d] delta[%ld]\n", phi->id, dt);
+
+		// START EATING, ZERO TIME
+		dt = check_state(phi, false, EAT);
+		if (phi->args->live < phi->args->eat)
 		{
-			pthread_mutex_lock(phi->l_fork);
-			print_state(phi, false, FORK);
+			usleep(phi->args->live);
+			check_state(phi, true, DIE);
 
-			pthread_mutex_lock(phi->r_fork);
-			print_state(phi, false, FORK);
-
-			// START EATING, ZERO TIME
-			print_state(phi, false, EAT);
-
-			// pthread_mutex_lock(phi->dead);
-			// if (check_dead(phi))
-			// 	return (NULL);
-			// else if (phi->args->live < phi->args->eat)
-			// {
-			// 	usleep(phi->args->live);
-
-			// 	pthread_mutex_unlock(phi->dead);
-			// 	print_state(phi, true, DIE);
-			// 	phi->args->dead = true;
-			// 	// print_dead(phi, DIE);
-			// 	pthread_mutex_unlock(phi->dead);
-
-			// 	pthread_mutex_unlock(phi->l_fork);
-			// 	pthread_mutex_unlock(phi->r_fork);
-			// 	return (NULL);
-			// }
-
-			usleep(phi->args->eat);
-			pthread_mutex_unlock(phi->l_fork);
 			pthread_mutex_unlock(phi->r_fork);
-
-			print_state(phi, false, SLEEP);
-			usleep(phi->args->sleep);
-
-
-
-			count++;
-			phi->eat++;
+			pthread_mutex_unlock(phi->l_fork);
+			return (NULL);
 		}
-		else
+		usleep(phi->args->eat);
+		pthread_mutex_unlock(phi->r_fork);
+		pthread_mutex_unlock(phi->l_fork);
+		// END EATING
+
+		// START SLEEPING, ZERO TIME
+		dt = check_state(phi, false, SLEEP) - dt;
+		if (phi->args->live < phi->args->sleep +  dt)
 		{
-			// count--;
-			usleep(5);
-			phi->eat++;
-			// return (NULL);
+			usleep(phi->args->live -  phi->args->eat);
+			check_state(phi, true, DIE);
+			return (NULL);
 		}
-		// count++;
-		// phi->eat--;
-	}
+		usleep(phi->args->sleep);
+		// END SLEEPING, ZERO TIME
+		dt = check_state(phi, false, THINK) - dt;
+		// printf(">> id[%d] delta[%ld]\n", phi->id, dt);
 
+
+		count++;
+		phi->eat++;
+	}
 	free(phi);
 	return (NULL);
 }
 
-// suseconds_t	time_to_die(t_time *time, suseconds_t *live)
-// {
-// 	suseconds_t	die;
-
-// }
-
-// void	print_state(t_phi *phi, t_time *t, pthread_mutex_t *write, char *msg)
-void	print_state(t_phi *phi, bool state, char *msg)
+t_usec	time_to_die(t_phi *phi)
 {
-	suseconds_t	m_sec;
-	t_time		time;
+	t_usec	die;
 
-	pthread_mutex_lock(phi->dead);
-	// phi->args->dead = phi->args->dead ^ state;
-	// phi->args->dead = (!phi->args->dead) * state;
-	// if (state)
-	// phi->args->dead = state;
-	gettimeofday(&time, NULL);
-	if (!check_dead(phi))
-	{
-		m_sec = delta_t(&phi->t0, &time);
-		pthread_mutex_lock(phi->write);
-		printf(msg, m_sec, phi->id);
-		pthread_mutex_unlock(phi->write);
-	}
+	usleep(phi->args->live);
+		check_state(phi, true, DIE);
+
+	pthread_mutex_unlock(phi->r_fork);
+	pthread_mutex_unlock(phi->l_fork);
+	return (0);
 }
 
-void	print_dead(t_phi *phi, char *msg)
+void	print_state(t_phi *phi, bool state, char *msg, t_usec u_sec)
 {
-	suseconds_t	m_sec;
-	t_time		time;
-
-	// phi->args->dead = phi->args->dead ^ state;
-	// phi->args->dead = (!phi->args->dead) * state;
-	// if (state)
-	// phi->args->dead = state;
-	gettimeofday(&time, NULL);
-	m_sec = delta_t(&phi->t0, &time);
+	phi->args->dead = state;
 	pthread_mutex_lock(phi->write);
-	printf(msg, m_sec, phi->id);
+	printf(msg, u_sec, phi->id);
 	pthread_mutex_unlock(phi->write);
+}
+
+void	do_nothing(t_phi *phi, bool state, char *msg, t_usec u_sec)
+{
+	return ;
+}
+
+t_usec	check_state(t_phi *phi, bool state, char *msg)
+{
+	t_usec	u_sec;
+	t_tval	tval;
+	void	(*func[2])(t_phi *, bool, char *, t_usec);
+
+	func[false] = print_state;
+	func[true] = do_nothing;
+
+	gettimeofday(&tval, NULL);
+	u_sec = delta_t(&phi->t0, &tval);
+	// printf(">> id[%d] delta[%ld]\n", phi->id, u_sec);
+	pthread_mutex_lock(phi->dead);
+	func[phi->args->dead](phi, state, msg, 0.001 * u_sec);
+	pthread_mutex_unlock(phi->dead);
+	return (u_sec);
 }
 
 int	check_dead(t_phi *phi)
 {
-	// if (phi->args->dead == true)
-	// {
-	// 	pthread_mutex_unlock(phi->dead);
-	// 	return (1);
-	// }
-	// pthread_mutex_unlock(phi->dead);
-	// return (0);
 	pthread_mutex_unlock(phi->dead);
 	return (phi->args->dead);
 }
 
-suseconds_t	delta_t(t_time *t0, t_time *t1)
+t_usec	delta_t(t_tval *t0, t_tval *t1)
 {
-	// suseconds_t	sec;
-	// suseconds_t	m_sec;
-
-	// sec = t1->tv_sec - t0->tv_sec;
-	// m_sec = t1->tv_usec - t0->tv_usec;
-	// if (m_sec < 0)
-	// {
-	// 	sec -= 1;
-	// 	m_sec += 1000000;
-	// }
-	// return ((sec * 100000 + m_sec) * 0.001);
-	return (((t1->tv_sec * 1000000 + t1->tv_usec) - (t0->tv_sec * 1000000 + t0->tv_usec)) * 0.001);
+	// return (((t1->tv_sec * 1000000 + t1->tv_usec) - (t0->tv_sec * 1000000 + t0->tv_usec)) * 0.001);
+	return ((t1->tv_sec * 1000000 + t1->tv_usec) - (t0->tv_sec * 1000000 + t0->tv_usec));
 }
