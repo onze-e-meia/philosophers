@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 16:31:20 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/06 20:35:35 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/07 14:54:23 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,8 @@ t_locks	*init_mutex(int nb_phi)
 		return (NULL);
 	index = 0;
 	while (index < nb_phi)
-	{
-		if (pthread_mutex_init(&locks->forks[index++], NULL) == 0)
-			printf("SUCCESS!\n");
-		else
-			printf("MUTEX ERROR!\n");
-	}
+		if (pthread_mutex_init(&locks->forks[index++], NULL))
+			return (NULL);
 	pthread_mutex_init(&locks->write, NULL);
 	pthread_mutex_init(&locks->meal, NULL);
 	pthread_mutex_init(&locks->dead, NULL);

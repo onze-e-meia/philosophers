@@ -6,7 +6,7 @@
 #    By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 14:23:38 by tforster          #+#    #+#              #
-#    Updated: 2024/07/06 17:40:26 by tforster         ###   ########.fr        #
+#    Updated: 2024/07/07 14:31:08 by tforster         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,8 +38,8 @@ OBJDIR	=	obj
 OBJ		=	${FILES:%.c=$(OBJDIR)/%.o}
 
 CC		=	cc
-# CFLGS	=	-g3 -pthread -Wextra -Wall -Werror
-CFLGS	=	-g3 -pthread
+CFLGS	=	-pthread -Wextra -Wall -Werror
+# CFLGS	=	-g3 -pthread
 
 all: $(NAME)
 

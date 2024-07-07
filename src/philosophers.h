@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 17:36:34 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/06 23:11:54 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/07 15:30:39 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,8 @@ int			join_threads(t_thread *thread, t_phi *phi, int nb_phi);
 void		*routine(void *args);
 void		grim_reaper(t_args *args, t_locks *locks, t_phi *phi);
 
-t_usec		check_state(t_phi *phi, bool state, char *msg);
+t_usec		timestamp(t_phi *phi, char *msg);
 void		print_state(t_phi *phi, bool state, char *msg, t_usec u_sec);
 void		do_nothing(t_phi *phi, bool state, char *msg, t_usec u_sec);
-
 
 #endif

@@ -6,15 +6,16 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:42:25 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/06 17:39:10 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/07 15:32:24 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-t_usec usec_time(void)
+t_usec	usec_time(void)
 {
 	t_tval	tval;
+
 	gettimeofday(&tval, NULL);
 	return (tval.tv_sec * 1000000 + tval.tv_usec);
 }

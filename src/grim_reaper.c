@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:22:04 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/06 23:26:07 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/07 14:48:37 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ static bool	dead_alive(t_locks *locks, t_phi *phi)
 	state = (usec - phi->time > phi->args->t_live);
 
 	pthread_mutex_lock(&locks->meal);
-	state = (phi->eaten < phi->args->nb_meals) * state;
-	pthread_mutex_unlock(&locks->meal);
-
+	state = !(phi->eaten == phi->args->nb_meals) * state;
 	// if (phi->eaten == phi->args->nb_meals)
 	// 	state = false;
+	pthread_mutex_unlock(&locks->meal);
+
 	// printf("%ds[%d] log[%ld] del[%ld] l[%ld]\n", phi->id, state, usec - phi->args->t0, (usec - phi->time), phi->args->live);
 	pthread_mutex_lock(phi->dead);
 	func[state](phi, state, DIE, usec);
