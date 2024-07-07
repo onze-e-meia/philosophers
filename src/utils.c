@@ -6,29 +6,17 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 13:42:25 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/05 15:31:10 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/06 17:39:10 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-// void	get_time(t_tval time)
-// {
-// 	gettimeofday(&time, NULL);
-// }
-
-t_usec	get_time()
+t_usec usec_time(void)
 {
-	struct timeval	time;
-	struct timeval	tv2;
-
-	gettimeofday(&time, NULL);
-	// usleep(400 * 1000);
-	// gettimeofday(&tv2, NULL);
-
-	// printf(">>> TIME [%ld] [%ld]\n", time.tv_sec, time.tv_usec);
-	// printf(">>> TIME [%ld] [%ld]\n", tv2.tv_sec, tv2.tv_usec);
-	return (time.tv_sec * 1000000 + time.tv_usec);
+	t_tval	tval;
+	gettimeofday(&tval, NULL);
+	return (tval.tv_sec * 1000000 + tval.tv_usec);
 }
 
 void	put_str(int fd, char *str)

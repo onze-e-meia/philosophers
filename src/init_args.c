@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 16:52:31 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/04 14:52:36 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/06 20:31:28 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,15 @@ int	init_args(int argc, char **argv, t_args *args)
 	}
 	if (err)
 		return (err);
-	args->nb_philos = atoi(argv[1]);
-	args->live = atoi(argv[2]) * 1000;
-	args->eat = atoi(argv[3]) * 1000;
-	args->sleep = atoi(argv[4]) * 1000;
-	args->times = -1;
+	args->nb_phi = atoi(argv[1]);
+	args->fed_phi = 0;
+	args->t_live = atoi(argv[2]) * 1000;
+	args->t_eat = atoi(argv[3]) * 1000;
+	args->t_sleep = atoi(argv[4]) * 1000;
+	args->nb_meals = -1;
 	args->dead = false;
 	if (argc == 6)
-		args->times = atoi(argv[5]);
+		args->nb_meals = atoi(argv[5]);
 	return (0);
 }
 

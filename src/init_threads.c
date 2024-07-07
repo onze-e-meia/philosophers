@@ -6,90 +6,85 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 16:49:10 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/05 15:05:59 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/06 20:36:05 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-t_phi	*init_philo(t_args *args, t_locks *locks, int index)
+t_phi	*init_phi(t_args *args, t_locks *locks)
 {
-	int		total;
+	int		index;
 	t_phi	*phi;
 
-	total = args->nb_philos;
-	phi = malloc(sizeof(t_phi));
+	phi = malloc(args->nb_phi * sizeof(t_phi));
 	if (!phi)
 		return (NULL);
-	phi->id = index + 1;
-	gettimeofday(&phi->t0, NULL);
-	phi->eat = 0;
-	phi->args = args;
-	if (phi->id % 2 != 0)
+	index = 0;
+	while (index < args->nb_phi)
 	{
-		phi->l_fork = &locks->forks[index % total];
-		phi->r_fork = &locks->forks[(index + 1) % total];
+		phi[index].id = index + 1;
+		phi[index].eaten = 0;
+		phi[index].args = args;
+		if (phi->id % 2 != 0)
+		{
+			phi[index].l_fork = &locks->forks[index % args->nb_phi];
+			phi[index].r_fork = &locks->forks[(index + 1) % args->nb_phi];
+		}
+		else
+		{
+			phi[index].l_fork = &locks->forks[(index + 1) % args->nb_phi];
+			phi[index].r_fork = &locks->forks[index % args->nb_phi];
+		}
+		phi[index].write = &locks->write;
+		phi[index].meal = &locks->meal;
+		phi[index].dead = &locks->dead;
+		index++;
 	}
-	else
-	{
-		phi->l_fork = &locks->forks[(index + 1) % total];
-		phi->r_fork = &locks->forks[index % total];
-	}
-	phi->write = &locks->write;
-	phi->dead = &locks->dead;
 	return (phi);
 }
 
-// t_phi	*init_threads(t_args *args, t_locks *locks)
-pthread_t	*init_threads(t_args *args, t_locks *locks)
+t_phi	*init_dining(t_phi *phi)
 {
-	int		total;
-	int		index;
-	t_phi	*phi;
-	pthread_t	*thread;
+	t_tval tval;
 
-	total = args->nb_philos;
-	// phi = malloc(args->nb_philos * sizeof(t_phi));
-	thread = malloc(total * sizeof(pthread_t));
-	// index = 0;
-	// while (index < total)
-	// {
-	// 	phi[index].id = 1 + index;
-	// 	phi[index].born = get_time();
-	// 	phi[index].args = args;
-	// 	phi[index].l_fork = locks->forks[index % total];
-	// 	phi[index].r_fork = locks->forks[(index + 1) % total];
-	// 	index++;
-	// }
+	gettimeofday(&tval, NULL);
+	phi->time = (tval.tv_sec * 1000000 + tval.tv_usec);
+	return(phi);
+}
 
+t_thread	*init_threads(t_args *args, t_phi *phi)
+{
+	int			index;
+	t_tval		tval;
+	t_thread	*thread;
+
+	thread = malloc(args->nb_phi * sizeof(t_thread));
+	if (!thread)
+		return (NULL);
 	index = 0;
-	while (index < total)
+	gettimeofday(&tval, NULL);
+	args->t0 = (tval.tv_sec * 1000000 + tval.tv_usec);
+	while (index < args->nb_phi)
 	{
-		// args->ctrl = malloc(sizeof(int));
-		// args->ctrl = &index;
-		// printf("CTRL [%d]\n", *args->ctrl);
-		// if (pthread_create(&phi[index].thread, NULL, starve, (void *) init_philo(args, locks, index)))
-		// 	return (NULL);
-		if (pthread_create(&thread[index], NULL, greedy_phi, (void *) init_philo(args, locks, index)))
+		if (pthread_create(&thread[index], NULL, routine, (void *) init_dining(&phi[index])))
 			return (NULL);
 		index++;
 	}
-	// return (phi);
 	return (thread);
 }
 
-// int	join_threads(t_args *args, pthread_t *philos)
-// int	join_threads(t_phi *phi, int nb_philos)
-int	join_threads(pthread_t *thread, int nb_philos)
+int	join_threads(t_thread *thread, t_phi *phi, int nb_phi)
 {
 	int	index;
 
 	index = 0;
-	while (index < nb_philos)
+	while (index < nb_phi)
 	{
-		// if (pthread_join(phi[index++].thread, NULL))
 		if (pthread_join(thread[index++], NULL))
 			return (1);
 	}
+	free(thread);
+	free(phi);
 	return (0);
 }

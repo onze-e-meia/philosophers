@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 17:36:34 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/05 17:38:13 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/06 23:11:54 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,51 +54,63 @@ typedef enum e_arg_error
 
 typedef struct timeval	t_tval;
 typedef suseconds_t		t_usec;
+typedef pthread_t		t_thread;
 typedef pthread_mutex_t	t_mutex;
 
 typedef struct s_args
 {
-	int				nb_philos;
-	t_usec		live;
-	t_usec		eat;
-	t_usec		sleep;
-	int				times;
-	bool			dead;
-}					t_args;
+	int		nb_phi;
+	int		fed_phi;
+	t_usec	t_live;
+	t_usec	t_eat;
+	t_usec	t_sleep;
+	t_usec	t0;
+	int		nb_meals;
+	bool	dead;
+}			t_args;
 
 typedef struct s_locks
 {
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	write;
-	pthread_mutex_t	dead;
+	t_mutex	*forks;
+	t_mutex	write;
+	t_mutex	meal;
+	t_mutex	dead;
 }					t_locks;
 
 typedef struct s_philo
 {
-	int				id;
-	t_tval			t0;
-	t_usec			time;
-	int				eat;
-	t_args			*args;
-	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*r_fork;
-	pthread_mutex_t	*write;
-	pthread_mutex_t	*dead;
+	int		id;
+	t_tval	t0;
+	t_usec	time;
+	int		eaten;
+	t_args	*args;
+	t_mutex	*l_fork;
+	t_mutex	*r_fork;
+	t_mutex	*write;
+	t_mutex	*meal;
+	t_mutex	*dead;
 }					t_phi;
 
-t_usec	get_time(void);
+t_usec		usec_time(void);
 void		put_str(int fd, char *str);
 int			is_digit(int ch);
 int			atoi(const char *nbr);
 
 int			init_args(int argc, char **argv, t_args *args);
 
-t_locks		*init_mutex(int nb_philos);
-int			destroy_mutex(t_locks *locks, int nb_philos);
+t_locks		*init_mutex(int nb_phi);
+int			destroy_mutex(t_locks *locks, int nb_phi);
 
-pthread_t	*init_threads(t_args *args, t_locks *locks);
-int			join_threads(pthread_t *thread, int nb_philos);
+t_phi		*init_phi(t_args *args, t_locks *locks);
+t_thread	*init_threads(t_args *args, t_phi *phi);
+int			join_threads(t_thread *thread, t_phi *phi, int nb_phi);
 
-void		*greedy_phi(void *args);
+void		*routine(void *args);
+void		grim_reaper(t_args *args, t_locks *locks, t_phi *phi);
+
+t_usec		check_state(t_phi *phi, bool state, char *msg);
+void		print_state(t_phi *phi, bool state, char *msg, t_usec u_sec);
+void		do_nothing(t_phi *phi, bool state, char *msg, t_usec u_sec);
+
 
 #endif

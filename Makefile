@@ -6,7 +6,7 @@
 #    By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 14:23:38 by tforster          #+#    #+#              #
-#    Updated: 2024/07/04 16:49:40 by tforster         ###   ########.fr        #
+#    Updated: 2024/07/06 17:40:26 by tforster         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,8 @@ FILES	=	\
 	init_mutex.c \
 	init_threads.c \
 	routine.c \
+	grim_reaper.c \
+	logs.c \
 
 SRCDIR	=	src
 SRC		=	$(FILES:%.c=$(SRCDIR)/%.o)

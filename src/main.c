@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 17:28:26 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/04 17:30:01 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/06 22:01:58 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 
 // 	int	p_nth = *philos->ctrl;
 // 	printf(">>>CTRL [%d]\n", *philos->ctrl);
-// 	int	total = philos->nb_philos;
+// 	int	total = philos->nb_phi;
 // 	pthread_mutex_unlock(&philos->write);
 
 // 	// pthread_mutex_lock(&philos->forks[p_nth % total]);
@@ -62,7 +62,7 @@ int	main(int argc, char **argv)
 	t_args		args;
 	t_locks		*locks;
 	t_phi		*phi;
-	pthread_t	*thread;
+	t_thread	*thread;
 
 	int		index;
 
@@ -77,29 +77,21 @@ int	main(int argc, char **argv)
 		return (flag);
 	else
 	{
-		printf("1 %d\n", args.nb_philos);
-		printf("2 %ld\n", args.live);
-		printf("3 %ld\n", args.eat);
-		printf("4 %ld\n", args.sleep);
-		printf("5 %d\n", args.times);
+		printf("1 %d\n", args.nb_phi);
+		printf("2 %ld\n", args.t_live);
+		printf("3 %ld\n", args.t_eat);
+		printf("4 %ld\n", args.t_sleep);
+		printf("5 %d\n", args.nb_meals);
 	}
 
-	locks = init_mutex(args.nb_philos);
+	locks = init_mutex(args.nb_phi);
+	phi = init_phi(&args, locks);
+	thread = init_threads(&args, phi);
 
-	// phi = init_threads(&args, locks);
-	thread = init_threads(&args, locks);
-	join_threads(thread, args.nb_philos);
+	grim_reaper(&args, locks, phi);
 
+	join_threads(thread, phi, args.nb_phi);
 
-	// index = 0;
-	// while (index < args.nb_philos)
-	// {
-	// 	printf("phi ID [%d] BORN [%ld]\n", phi[index].id, phi[index].born);
-	// 	printf("L[%d] R[%d]\n", index % args.nb_philos, (index + 1) % args.nb_philos);
-	// 	index++;
-	// }
-
-	free(thread);
-	destroy_mutex(locks, args.nb_philos);
+	destroy_mutex(locks, args.nb_phi);
 	return (flag);
 }
