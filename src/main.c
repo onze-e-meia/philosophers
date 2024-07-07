@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 17:28:26 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/07 17:31:35 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/07 20:31:18 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,6 @@ int	main(int argc, char **argv)
 	flag = init_args(argc, argv, &args);
 	if (flag)
 		return (flag);
-	else
-	{
-		printf("1 %d\n", args.nb_phi);
-		printf("2 %ld\n", args.t_live);
-		printf("3 %ld\n", args.t_eat);
-		printf("4 %ld\n", args.t_sleep);
-		printf("5 %d\n", args.nb_meals);
-	}
 	locks = init_mutex(args.nb_phi);
 	phi = init_phi(&args, locks);
 	thread = init_threads(&args, phi);

@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 17:36:34 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/07 19:05:29 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/07 20:30:16 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,11 @@
 
 # define ERR0 "Argument is empty.\n"
 # define ERR1 "Argument is a negative number.\n"
-# define ERR2 "Argument is not a number.\n"
+# define ERR2 "Argument is not a valid number.\n"
 # define ERR3 "Argument time (micro_s) is bigger then 16 minutes.\n"
-# define ERR4 "Argument times to eat is bigger then 999999999.\n"
-# define ERR5 "Argument must bigger then 60.\n"
+# define ERR4 "Argument number of philos must bigger then 0.\n"
+# define ERR5 "Argument time must bigger then 60.\n"
+# define ERR6 "Argument times to eat is bigger then 999999999.\n"
 
 # define FORK " %ld %d\033[0;35m has taken a fork\033[0m\n"
 # define EAT " %ld %d\033[0;33m is eating\033[0m\n"
@@ -50,8 +51,8 @@ typedef enum e_arg_error
 	EMPTY_ARG,
 	NEG_ARG,
 	NOT_DIGIT,
-	TOO_BIG,
 	TOO_SMAL,
+	TOO_BIG,
 }	t_arg_error;
 
 typedef struct timeval	t_tval;

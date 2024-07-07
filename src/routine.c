@@ -6,15 +6,16 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 16:42:54 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/07 18:09:07 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/07 20:37:39 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+static void	*lone_phi(t_phi *phi);
 static void	gluttony(t_phi *phi, int *count);
 static void	sloth(t_phi *phi, int *count);
-int			check_dead(t_phi *phi);
+static int	check_dead(t_phi *phi);
 
 void	*routine(void *args)
 {
@@ -23,6 +24,8 @@ void	*routine(void *args)
 	int		count;
 
 	phi = (t_phi *) args;
+	if (phi->args->nb_phi == 1)
+		return (lone_phi(phi));
 	loop = (phi->args->nb_meals == -1);
 	count = 0;
 	while (count < 2 * phi->args->nb_meals || loop)
@@ -38,6 +41,15 @@ void	*routine(void *args)
 	pthread_mutex_lock(phi->meal);
 	phi->args->fed_phi++;
 	pthread_mutex_unlock(phi->meal);
+	return (NULL);
+}
+
+static void	*lone_phi(t_phi *phi)
+{
+	pthread_mutex_lock(phi->l_fork);
+	timestamp(phi, FORK);
+	usleep(phi->args->t_live);
+	pthread_mutex_unlock(phi->l_fork);
 	return (NULL);
 }
 
@@ -67,7 +79,7 @@ static void	sloth(t_phi *phi, int *count)
 	(*count)++;
 }
 
-int	check_dead(t_phi *phi)
+static int	check_dead(t_phi *phi)
 {
 	bool	status;
 
