@@ -2,6 +2,7 @@
 # Directory #
 #############
 objs/
+trash/
 .vscode/
 
 #########
@@ -11,6 +12,7 @@ objs/
 *.o
 *.sh
 *.txt
+*copy*
 philosophers
 philo
 phi

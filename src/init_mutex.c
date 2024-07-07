@@ -6,13 +6,12 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 16:31:20 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/07 14:54:23 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/07 18:43:21 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-// int	init_mutex(t_locks *locks, int nb_phi)
 t_locks	*init_mutex(int nb_phi)
 {
 	int		index;

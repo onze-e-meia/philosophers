@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 16:52:31 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/06 20:31:28 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/07 19:10:31 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	check_argv(char i, char *nbr)
 {
 	int	sign;
 	int	err;
+	int	rslt;
 
 	if (!*nbr)
 		return (arg_error(i, EMPTY_ARG));
@@ -64,18 +65,24 @@ int	check_argv(char i, char *nbr)
 	if (!err)
 		if (sign == -1)
 			return (arg_error(i, NEG_ARG));
+	rslt = atoi(nbr);
+	if (rslt < 60)
+		return (arg_error(i, TOO_SMAL));
 	return (err);
 }
 
 int	arg_error(char i, t_arg_error err)
 {
-	const char	*error_msg[5] = {ERR01, ERR02, ERR03, ERR04, ERR05};
+	const char	*error_msg[6] = {ERR0, ERR1, ERR2, ERR3, ERR4, ERR5};
 
 	write(2, "[", 1);
 	write(2, &i, 1);
 	write(2, "] :", 2);
+	printf("[%d]\n", err);
 	if (i == '5' && err == TOO_BIG)
 		put_str(STDERR_FILENO, (char *) error_msg[4]);
+	else if (i != '5' && err == TOO_SMAL)
+		put_str(STDERR_FILENO, (char *) error_msg[TOO_SMAL]);
 	else
 		put_str(STDERR_FILENO, (char *) error_msg[err - 1]);
 	return (err);

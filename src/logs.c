@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/06 17:35:16 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/07 15:30:21 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/07 17:49:05 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,11 @@
 
 t_usec	timestamp(t_phi *phi, char *msg)
 {
-	t_usec	usec;
-	t_tval	tval;
-	void	(*func[2])(t_phi *, bool, char *, t_usec);
+	t_usec			usec;
+	const t_print	func[2] = {print_state, do_nothing};
 
-	func[false] = print_state;
-	func[true] = do_nothing;
-	gettimeofday(&tval, NULL);
-	usec = usec_time();
 	pthread_mutex_lock(phi->dead);
+	usec = usec_time();
 	func[phi->args->dead](phi, false, msg, usec);
 	pthread_mutex_unlock(phi->dead);
 	return (usec);

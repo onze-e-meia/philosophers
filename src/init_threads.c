@@ -6,7 +6,7 @@
 /*   By: tforster <tfforster@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 16:49:10 by tforster          #+#    #+#             */
-/*   Updated: 2024/07/07 15:32:56 by tforster         ###   ########.fr       */
+/*   Updated: 2024/07/07 18:42:41 by tforster         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_phi	*init_phi(t_args *args, t_locks *locks)
 
 static void	swap_forks(t_args *args, t_locks *locks, t_phi *phi, int index)
 {
-	if (phi->id % 2 != 0)
+	if (phi[index].id % 2 != 0)
 	{
 		phi[index].l_fork = &locks->forks[index % args->nb_phi];
 		phi[index].r_fork = &locks->forks[(index + 1) % args->nb_phi];
